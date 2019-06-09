@@ -43,8 +43,14 @@ DATA(lookup_table) = VALUE tty_lookup(
                        ( uname = 'USER03'    text = 'u3' )
                      ).
 
-DATA(result_table) = CORRESPONDING tty_result( base_table FROM lookup_table
-                                                          USING uname = uname ) ##operator.
+* this doesn't work, text column in result_table remains empty
+*
+* DATA(result_table) = CORRESPONDING tty_result( base_table FROM lookup_table
+*                                                           USING uname = uname ) ##operator.
+
+DATA(result_table) = CORRESPONDING tty_result( CORRESPONDING tty_result( base_table )
+                                                        FROM lookup_table
+                                                        USING uname = uname ) ##operator.
 
 cl_demo_output=>write( base_table ).
 cl_demo_output=>write( lookup_table ).
